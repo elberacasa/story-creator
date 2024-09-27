@@ -22,7 +22,7 @@ Before you begin, ensure you have met the following requirements:
 
 1. Clone the repository:
    ```
-   git clone https://github.com/yourusername/ai-story-narration.git
+   https://github.com/elberacasa/story-creator.git
    ```
 
 2. Navigate to the project directory:
