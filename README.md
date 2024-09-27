@@ -1,70 +1,79 @@
-# Getting Started with Create React App
+# AI Story Narration
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+AI Story Narration is an interactive web application that uses artificial intelligence to generate, illustrate, and narrate children's stories. This project leverages OpenAI's GPT and DALL-E models to create unique, engaging stories with accompanying images and audio narration.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- Generate custom children's stories based on user input
+- Create AI-generated illustrations for the stories
+- Produce audio narrations of the stories
+- Save and manage a library of generated stories
+- Preview and edit generated content
 
-### `npm start`
+## Prerequisites
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Before you begin, ensure you have met the following requirements:
+- Node.js (v14.0.0 or later)
+- npm (v6.0.0 or later)
+- An OpenAI API key
+- An ElevenLabs API key (optional, for high-quality voice generation)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Installation
 
-### `npm test`
+1. Clone the repository:
+   ```
+   git clone https://github.com/yourusername/ai-story-narration.git
+   ```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+2. Navigate to the project directory:
+   ```
+   cd ai-story-narration
+   ```
 
-### `npm run build`
+3. Install the dependencies:
+   ```
+   npm install
+   ```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+4. Create a `.env` file in the root directory and add your API keys:
+   ```
+   REACT_APP_OPENAI_API_KEY=your_openai_api_key_here
+   REACT_APP_ELEVENLABS_API_KEY=your_elevenlabs_api_key_here
+   ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Usage
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. Start the development server:
+   ```
+   npm start
+   ```
 
-### `npm run eject`
+2. Open your browser and visit `http://localhost:3000`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+3. Follow the on-screen instructions to generate, illustrate, and narrate your story
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Contributing
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Contributions to the AI Story Narration project are welcome. Please follow these steps:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+1. Fork the repository
+2. Create a new branch: `git checkout -b feature/your-feature-name`
+3. Make your changes and commit them: `git commit -m 'Add some feature'`
+4. Push to the branch: `git push origin feature/your-feature-name`
+5. Submit a pull request
 
-## Learn More
+## License
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+This project is licensed under the MIT License. See the `LICENSE` file for details.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Contact
 
-### Code Splitting
+If you have any questions or feedback, please open an issue on the GitHub repository.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Acknowledgements
 
-### Analyzing the Bundle Size
+- [OpenAI](https://openai.com/) for providing the GPT and DALL-E models
+- [ElevenLabs](https://elevenlabs.io/) for the text-to-speech API
+- [React](https://reactjs.org/) for the frontend framework
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Happy storytelling!
