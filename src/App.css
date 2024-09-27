@@ -347,12 +347,13 @@ button:disabled {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 20px;
+  margin-top: 16px;
 }
 
 .generated-image img {
   max-width: 100%;
-  margin-bottom: 10px;
+  border-radius: 8px;
+  margin-bottom: 16px;
 }
 
 .generated-image button {
@@ -406,4 +407,46 @@ button:disabled {
 
 .story-title:hover {
   text-decoration: underline;
+}
+
+.MuiPaper-root.story-generator {
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.MuiGrid-root {
+  margin-bottom: 16px;
+}
+
+.MuiButton-root {
+  margin-right: 8px;
+  margin-bottom: 8px;
+}
+
+.book-viewer .MuiDialog-paper {
+  max-width: 800px;
+}
+
+.book-viewer .MuiDialogContent-root {
+  padding: 24px;
+}
+
+.book-viewer img {
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.story-library .MuiCard-root {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.story-library .MuiCardMedia-root {
+  height: 140px;
+}
+
+.story-library .MuiCardContent-root {
+  flex-grow: 1;
 }

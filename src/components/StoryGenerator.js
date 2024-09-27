@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { TextField, Button, Select, MenuItem, FormControl, InputLabel, Typography, Paper, Grid, Box} from '@mui/material';
+import { styled } from '@mui/material/styles';
 import OpenAI from 'openai';
 import SavedStories from './SavedStories';
 import LoadingSpinner from './LoadingSpinner';
@@ -23,6 +25,20 @@ const openAIVoices = [
   { id: 'nova', name: 'Nova' },
   { id: 'shimmer', name: 'Shimmer' },
 ];
+
+// Create a styled version of FormControl to maintain consistent height
+const StyledFormControl = styled(FormControl)(({ theme }) => ({
+  '& .MuiInputLabel-root': {
+    transform: 'translate(14px, 14px) scale(1)',
+  },
+  '& .MuiInputLabel-shrink': {
+    transform: 'translate(14px, -6px) scale(0.75)',
+  },
+  '& .MuiSelect-select': {
+    paddingTop: '14px',
+    paddingBottom: '14px',
+  },
+}));
 
 function StoryGenerator({ onStoryGenerated, onAudioGenerated, onImageGenerated, currentStep, setCurrentStep, generatedStory, setGeneratedStory, updateSavedStories }) {
   const [prompt, setPrompt] = useState('');
@@ -280,176 +296,325 @@ function StoryGenerator({ onStoryGenerated, onAudioGenerated, onImageGenerated, 
   };
 
   return (
-    <div className="story-generator">
+    <Paper elevation={3} className="story-generator">
       {currentStep === 1 && (
-        <>
-          <h2>Step 1: Story Details</h2>
-          <select
-            value={language}
-            onChange={(e) => setLanguage(e.target.value)}
-          >
-            {languages.map((lang) => (
-              <option key={lang.code} value={lang.code}>
-                {lang.name}
-              </option>
-            ))}
-          </select>
-          <input
-            type="text"
-            value={childName}
-            onChange={(e) => setChildName(e.target.value)}
-            placeholder="Child's Name"
-          />
-          <input
-            type="number"
-            value={childAge}
-            onChange={(e) => setChildAge(e.target.value)}
-            placeholder="Child's Age"
-          />
-          <input
-            type="text"
-            value={storyTheme}
-            onChange={(e) => setStoryTheme(e.target.value)}
-            placeholder="Story Theme (e.g., Adventure, Friendship)"
-          />
-          <input
-            type="text"
-            value={storyMoral}
-            onChange={(e) => setStoryMoral(e.target.value)}
-            placeholder="Moral Lesson"
-          />
-          <select
-            value={contentFilter}
-            onChange={(e) => setContentFilter(e.target.value)}
-          >
-            <option value="family-friendly">Family Friendly</option>
-            <option value="educational">Educational</option>
-            <option value="fantasy">Fantasy</option>
-          </select>
-          <textarea
-            value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
-            placeholder="Additional story details or elements..."
-          />
-          <button onClick={generateStory} disabled={loading || childName.trim() === '' || childAge === ''}>
-            {loading ? 'Generating Story...' : 'Generate Story'}
-          </button>
-          <button onClick={() => setCurrentStep(2)} disabled={!generatedStory.trim()}>Next: Image Settings</button>
-          <SavedStories key={savedStoriesKey} onLoadStory={loadStory} onStoryChange={handleStoryChange} />
-        </>
+        <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gap={3}>
+          <Box gridColumn="span 12">
+            <Typography variant="h5" gutterBottom>Step 1: Story Details</Typography>
+          </Box>
+          <Box gridColumn="span 6">
+            <StyledFormControl fullWidth>
+              <InputLabel id="language-label">Language</InputLabel>
+              <Select
+                labelId="language-label"
+                value={language}
+                label="Language"
+                onChange={(e) => setLanguage(e.target.value)}
+              >
+                {languages.map((lang) => (
+                  <MenuItem key={lang.code} value={lang.code}>{lang.name}</MenuItem>
+                ))}
+              </Select>
+            </StyledFormControl>
+          </Box>
+          <Box gridColumn="span 6">
+            <TextField
+              fullWidth
+              placeholder="Child's Name"
+              value={childName}
+              onChange={(e) => setChildName(e.target.value)}
+            />
+          </Box>
+          <Box gridColumn="span 6">
+            <TextField
+              fullWidth
+              placeholder="Child's Age"
+              type="number"
+              value={childAge}
+              onChange={(e) => setChildAge(e.target.value)}
+            />
+          </Box>
+          <Box gridColumn="span 6">
+            <TextField
+              fullWidth
+              placeholder="Story Theme (e.g., Adventure, Friendship)"
+              value={storyTheme}
+              onChange={(e) => setStoryTheme(e.target.value)}
+            />
+          </Box>
+          <Box gridColumn="span 6">
+            <TextField
+              fullWidth
+              placeholder="Moral Lesson"
+              value={storyMoral}
+              onChange={(e) => setStoryMoral(e.target.value)}
+            />
+          </Box>
+          <Box gridColumn="span 6">
+            <StyledFormControl fullWidth>
+              <InputLabel id="content-filter-label">Content Filter</InputLabel>
+              <Select
+                labelId="content-filter-label"
+                value={contentFilter}
+                label="Content Filter"
+                onChange={(e) => setContentFilter(e.target.value)}
+              >
+                <MenuItem value="family-friendly">Family Friendly</MenuItem>
+                <MenuItem value="educational">Educational</MenuItem>
+                <MenuItem value="fantasy">Fantasy</MenuItem>
+              </Select>
+            </StyledFormControl>
+          </Box>
+          <Box gridColumn="span 12">
+            <TextField
+              fullWidth
+              placeholder="Additional story details or elements..."
+              multiline
+              rows={4}
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+            />
+          </Box>
+          <Box gridColumn="span 12">
+            <Button 
+              variant="contained" 
+              color="primary"
+              onClick={generateStory} 
+              disabled={loading || childName.trim() === '' || childAge === ''}
+            >
+              {loading ? 'Generating Story...' : 'Generate Story'}
+            </Button>
+          </Box>
+          <Box gridColumn="span 12">
+            <Button 
+              variant="contained" 
+              color="secondary"
+              onClick={() => setCurrentStep(2)}
+              disabled={!generatedStory.trim()}
+            >
+              Next: Image Settings
+            </Button>
+          </Box>
+          <Box gridColumn="span 12">
+            <SavedStories key={savedStoriesKey} onLoadStory={loadStory} onStoryChange={handleStoryChange} />
+          </Box>
+        </Box>
       )}
 
       {currentStep === 2 && (
-        <>
-          <h2>Step 2: Image Settings</h2>
-          <h3>Generated Story:</h3>
-          <input
-            type="text"
-            value={storyTitle}
-            onChange={(e) => setStoryTitle(e.target.value)}
-            placeholder="Enter a title for your story"
-          />
-          <textarea
-            className="story-text"
-            value={generatedStory}
-            onChange={(e) => setGeneratedStory(e.target.value)}
-            placeholder="Your generated story will appear here. You can edit it directly."
-          />
-          <button onClick={saveStory} disabled={!generatedStory.trim()}>Save Story</button>
-          <button className="expand-button" onClick={expandStory} disabled={isExpanding || !generatedStory.trim()}>
-            {isExpanding ? 'Expanding Story...' : 'Expand Story'}
-          </button>
-          <button onClick={generateImage} disabled={loading || !generatedStory.trim()}>
-            {loading ? 'Generating Image...' : 'Generate Image'}
-          </button>
+        <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gap={3}>
+          <Box gridColumn="span 12">
+            <Typography variant="h5" gutterBottom>Step 2: Image Settings</Typography>
+          </Box>
+          <Box gridColumn="span 12">
+            <Typography variant="h6" gutterBottom>Generated Story:</Typography>
+          </Box>
+          <Box gridColumn="span 12">
+            <TextField
+              fullWidth
+              placeholder="Enter a title for your story"
+              value={storyTitle}
+              onChange={(e) => setStoryTitle(e.target.value)}
+            />
+          </Box>
+          <Box gridColumn="span 12">
+            <TextField
+              fullWidth
+              placeholder="Your generated story will appear here. You can edit it directly."
+              multiline
+              rows={4}
+              value={generatedStory}
+              onChange={(e) => setGeneratedStory(e.target.value)}
+            />
+          </Box>
+          <Box gridColumn="span 12">
+            <Button 
+              variant="contained" 
+              color="primary"
+              onClick={saveStory}
+              disabled={!generatedStory.trim()}
+            >
+              Save Story
+            </Button>
+          </Box>
+          <Box gridColumn="span 12">
+            <Button 
+              variant="contained" 
+              color="secondary"
+              onClick={expandStory}
+              disabled={isExpanding || !generatedStory.trim()}
+            >
+              {isExpanding ? 'Expanding Story...' : 'Expand Story'}
+            </Button>
+          </Box>
+          <Box gridColumn="span 12">
+            <Button 
+              variant="contained" 
+              color="primary"
+              onClick={generateImage}
+              disabled={loading || !generatedStory.trim()}
+            >
+              {loading ? 'Generating Image...' : 'Generate Image'}
+            </Button>
+          </Box>
           {generatedImageUrl && (
-            <div className="generated-image">
-              <img src={generatedImageUrl} alt="Generated story illustration" />
-              <button onClick={generateImage} disabled={loading}>
-                {loading ? 'Regenerating Image...' : 'Regenerate Image'}
-              </button>
-            </div>
+            <Box gridColumn="span 12">
+              <div className="generated-image">
+                <img src={generatedImageUrl} alt="Generated story illustration" />
+                <Button 
+                  variant="contained" 
+                  color="secondary"
+                  onClick={generateImage}
+                  disabled={loading}
+                >
+                  {loading ? 'Regenerating Image...' : 'Regenerate Image'}
+                </Button>
+              </div>
+            </Box>
           )}
-          <button onClick={() => setCurrentStep(1)}>Back to Story Details</button>
-          <button onClick={() => setCurrentStep(3)} disabled={!generatedImageUrl}>Next: Audio Settings</button>
-        </>
+          <Box gridColumn="span 12">
+            <Button 
+              variant="contained" 
+              color="secondary"
+              onClick={() => setCurrentStep(1)}
+            >
+              Back to Story Details
+            </Button>
+          </Box>
+          <Box gridColumn="span 12">
+            <Button 
+              variant="contained" 
+              color="primary"
+              onClick={() => setCurrentStep(3)}
+              disabled={!generatedImageUrl}
+            >
+              Next: Audio Settings
+            </Button>
+          </Box>
+        </Box>
       )}
 
       {currentStep === 3 && (
-        <>
-          <h2>Step 3: Audio Settings</h2>
-          <div className="form-group">
-            <label htmlFor="audioProvider">Audio Provider:</label>
-            <select
-              id="audioProvider"
-              value={audioProvider}
-              onChange={(e) => setAudioProvider(e.target.value)}
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Typography variant="h5" gutterBottom>Step 3: Audio Settings</Typography>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <FormControl fullWidth>
+              <InputLabel>Audio Provider</InputLabel>
+              <Select
+                value={audioProvider}
+                onChange={(e) => setAudioProvider(e.target.value)}
+              >
+                <MenuItem value="elevenlabs">ElevenLabs (High Quality)</MenuItem>
+                <MenuItem value="openai">OpenAI (Basic)</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+          {audioProvider === 'elevenlabs' && voices.length > 0 && (
+            <Grid item xs={12} sm={6}>
+              <FormControl fullWidth>
+                <InputLabel>ElevenLabs Voice</InputLabel>
+                <Select
+                  value={selectedVoice}
+                  onChange={(e) => setSelectedVoice(e.target.value)}
+                >
+                  {voices.map((voice) => (
+                    <MenuItem key={voice.voice_id} value={voice.voice_id}>
+                      {voice.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+          )}
+          {audioProvider === 'openai' && (
+            <Grid item xs={12} sm={6}>
+              <FormControl fullWidth>
+                <InputLabel>OpenAI Voice</InputLabel>
+                <Select
+                  value={openAIVoice}
+                  onChange={(e) => setOpenAIVoice(e.target.value)}
+                >
+                  {openAIVoices.map((voice) => (
+                    <MenuItem key={voice.id} value={voice.id}>
+                      {voice.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+          )}
+          <Grid item xs={12}>
+            <Typography variant="h6" gutterBottom>Generated Story:</Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              placeholder="Enter a title for your story"
+              value={storyTitle}
+              onChange={(e) => setStoryTitle(e.target.value)}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              placeholder="Your generated story will appear here. You can edit it directly."
+              multiline
+              rows={4}
+              value={generatedStory}
+              onChange={(e) => setGeneratedStory(e.target.value)}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Button 
+              variant="contained" 
+              color="primary"
+              onClick={saveStory}
+              disabled={!generatedStory.trim()}
             >
-              <option value="elevenlabs">ElevenLabs (High Quality)</option>
-              <option value="openai">OpenAI (Basic)</option>
-            </select>
-          </div>
-
-          {audioProvider === 'elevenlabs' && voices.length > 0 ? (
-            <div className="form-group">
-              <label htmlFor="elevenLabsVoice">ElevenLabs Voice:</label>
-              <select
-                id="elevenLabsVoice"
-                value={selectedVoice}
-                onChange={(e) => setSelectedVoice(e.target.value)}
-              >
-                {voices.map((voice) => (
-                  <option key={voice.voice_id} value={voice.voice_id}>
-                    {voice.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          ) : audioProvider === 'openai' ? (
-            <div className="form-group">
-              <label htmlFor="openAIVoice">OpenAI Voice:</label>
-              <select
-                id="openAIVoice"
-                value={openAIVoice}
-                onChange={(e) => setOpenAIVoice(e.target.value)}
-              >
-                {openAIVoices.map((voice) => (
-                  <option key={voice.id} value={voice.id}>
-                    {voice.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          ) : null}
-
-          <h3>Generated Story:</h3>
-          <input
-            type="text"
-            value={storyTitle}
-            onChange={(e) => setStoryTitle(e.target.value)}
-            placeholder="Enter a title for your story"
-          />
-          <textarea
-            className="story-text"
-            value={generatedStory}
-            onChange={(e) => setGeneratedStory(e.target.value)}
-            placeholder="Your generated story will appear here. You can edit it directly."
-          />
-          <button onClick={saveStory}>Save Story</button>
-          <button className="expand-button" onClick={expandStory} disabled={isExpanding || !generatedStory.trim()}>
-            {isExpanding ? 'Expanding Story...' : 'Expand Story'}
-          </button>
-          <button onClick={generateAudio} disabled={loading || !generatedStory.trim()}>
-            {loading ? 'Generating Audio...' : 'Generate Audio'}
-          </button>
-          <button onClick={() => setCurrentStep(2)}>Back to Image Settings</button>
-        </>
+              Save Story
+            </Button>
+          </Grid>
+          <Grid item xs={12}>
+            <Button 
+              variant="contained" 
+              color="secondary"
+              onClick={expandStory}
+              disabled={isExpanding || !generatedStory.trim()}
+            >
+              {isExpanding ? 'Expanding Story...' : 'Expand Story'}
+            </Button>
+          </Grid>
+          <Grid item xs={12}>
+            <Button 
+              variant="contained" 
+              color="primary"
+              onClick={generateAudio}
+              disabled={loading || !generatedStory.trim()}
+            >
+              {loading ? 'Generating Audio...' : 'Generate Audio'}
+            </Button>
+          </Grid>
+          <Grid item xs={12}>
+            <Button 
+              variant="contained" 
+              color="secondary"
+              onClick={() => setCurrentStep(2)}
+            >
+              Back to Image Settings
+            </Button>
+          </Grid>
+        </Grid>
       )}
 
-      {error && <p className="error-message">{error}</p>}
+      {error && (
+        <Typography color="error" className="error-message">{error}</Typography>
+      )}
       {loading && <LoadingSpinner />}
-    </div>
+    </Paper>
   );
 }
 
 export default StoryGenerator;
+

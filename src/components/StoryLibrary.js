@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import BookViewer from './BookViewer'; // We'll create this component next
+import { Typography, Grid, Card, CardMedia, CardContent, CardActionArea } from '@mui/material';
+import BookViewer from './BookViewer';
 
 function StoryLibrary({ stories, onDeleteStory }) {
   const [selectedBook, setSelectedBook] = useState(null);
@@ -14,15 +15,28 @@ function StoryLibrary({ stories, onDeleteStory }) {
 
   return (
     <div className="story-library">
-      <h2>Your Story Collection</h2>
-      <div className="book-shelf">
+      <Typography variant="h4" gutterBottom>Your Story Collection</Typography>
+      <Grid container spacing={3}>
         {stories.map((story, index) => (
-          <div key={index} className="book" onClick={() => handleBookClick(story)}>
-            <img src={story.imageUrl} alt={story.title} className="book-cover" />
-            <div className="book-title">{story.title}</div>
-          </div>
+          <Grid item xs={12} sm={6} md={4} key={index}>
+            <Card>
+              <CardActionArea onClick={() => handleBookClick(story)}>
+                <CardMedia
+                  component="img"
+                  height="140"
+                  image={story.imageUrl}
+                  alt={story.title}
+                />
+                <CardContent>
+                  <Typography variant="h6" component="div">
+                    {story.title}
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
+            </Card>
+          </Grid>
         ))}
-      </div>
+      </Grid>
       {selectedBook && (
         <BookViewer 
           story={selectedBook} 

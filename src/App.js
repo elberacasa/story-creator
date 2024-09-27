@@ -1,9 +1,21 @@
 import React, { useState, useEffect } from 'react';
+import { ThemeProvider, createTheme, CssBaseline, Container, Typography, Stepper, Step, StepLabel, Paper, Button } from '@mui/material';
 import StoryGenerator from './components/StoryGenerator';
 import AudioPlayer from './components/AudioPlayer';
 import ErrorBoundary from './components/ErrorBoundary';
 import StoryLibrary from './components/StoryLibrary';
 import './App.css';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#3498db',
+    },
+    secondary: {
+      main: '#2ecc71',
+    },
+  },
+});
 
 function App() {
   const [generatedStory, setGeneratedStory] = useState('');
@@ -57,39 +69,47 @@ function App() {
     console.log('Opening book:', story.title);
   };
 
+  const steps = ['Story Details', 'Image Settings', 'Audio Settings', 'Final Story'];
+
   return (
-    <ErrorBoundary>
-      <div className="App">
-        <h1>AI Story Narration</h1>
-        <div className="progress-bar">
-          <div className={`progress-step ${currentStep >= 1 ? 'active' : ''}`}>1. Story Details</div>
-          <div className={`progress-step ${currentStep >= 2 ? 'active' : ''}`}>2. Image Settings</div>
-          <div className={`progress-step ${currentStep >= 3 ? 'active' : ''}`}>3. Audio Settings</div>
-          <div className={`progress-step ${currentStep >= 4 ? 'active' : ''}`}>4. Final Story</div>
-        </div>
-        <StoryGenerator 
-          onStoryGenerated={handleStoryGenerated} 
-          onAudioGenerated={handleAudioGenerated}
-          onImageGenerated={handleImageGenerated}
-          currentStep={currentStep}
-          setCurrentStep={setCurrentStep}
-          generatedStory={generatedStory}
-          setGeneratedStory={setGeneratedStory}
-          updateSavedStories={updateSavedStories}
-          onDeleteStory={handleDeleteStory}
-          onOpenBook={handleOpenBook}
-        />
-        {currentStep === 4 && audioUrl && imageUrl && (
-          <div className="final-story">
-            <h2>Your Generated Story</h2>
-            <img src={imageUrl} alt="Story illustration" className="story-image" />
-            <AudioPlayer audioUrl={audioUrl} story={generatedStory} />
-            <button className="reset-button" onClick={resetForm}>Create Another Story</button>
-          </div>
-        )}
-        <StoryLibrary stories={savedStories} onDeleteStory={handleDeleteStory} />
-      </div>
-    </ErrorBoundary>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <ErrorBoundary>
+        <Container maxWidth="md" className="App">
+          <Typography variant="h3" component="h1" gutterBottom align="center">
+            AI Story Narration
+          </Typography>
+          <Stepper activeStep={currentStep - 1} alternativeLabel>
+            {steps.map((label) => (
+              <Step key={label}>
+                <StepLabel>{label}</StepLabel>
+              </Step>
+            ))}
+          </Stepper>
+          <StoryGenerator 
+            onStoryGenerated={handleStoryGenerated} 
+            onAudioGenerated={handleAudioGenerated}
+            onImageGenerated={handleImageGenerated}
+            currentStep={currentStep}
+            setCurrentStep={setCurrentStep}
+            generatedStory={generatedStory}
+            setGeneratedStory={setGeneratedStory}
+            updateSavedStories={updateSavedStories}
+            onDeleteStory={handleDeleteStory}
+            onOpenBook={handleOpenBook}
+          />
+          {currentStep === 4 && audioUrl && imageUrl && (
+            <Paper elevation={3} className="final-story">
+              <Typography variant="h4" gutterBottom>Your Generated Story</Typography>
+              <img src={imageUrl} alt="Story illustration" className="story-image" />
+              <AudioPlayer audioUrl={audioUrl} story={generatedStory} />
+              <Button variant="contained" color="primary" onClick={resetForm}>Create Another Story</Button>
+            </Paper>
+          )}
+          <StoryLibrary stories={savedStories} onDeleteStory={handleDeleteStory} />
+        </Container>
+      </ErrorBoundary>
+    </ThemeProvider>
   );
 }
 
